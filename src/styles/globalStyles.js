@@ -9,11 +9,13 @@ export const globalStyles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 40,
         paddingBottom: 70,
-        justifyContent: "center"
+        justifyContent: "center",
     },
     button: {
         height: 50,
         justifyContent: "center",
-        backgroundColor: theme.colors.primary
+        alignItems: "center",
+        backgroundColor: theme.colors.primary,
+        borderRadius: 100
     }
 })

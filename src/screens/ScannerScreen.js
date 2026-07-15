@@ -1,8 +1,9 @@
 import { View, Text } from "react-native";
+import { globalStyles } from "../styles/globalStyles";
 
 export default function ScannerScreen() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={globalStyles.containerPrincipal}>
       <Text>Scanner Screen</Text>
     </View>
   );
