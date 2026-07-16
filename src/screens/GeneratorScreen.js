@@ -1,12 +1,16 @@
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { globalStyles } from "../styles/globalStyles";
 import { theme } from "../styles/theme";
 import QRCode from "react-native-qrcode-svg";
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 
 export default function GeneratorScreen() {
   const [text, setText] = useState("");
   const [qrValue, setQrValue] = useState("");
+
+  const qrRef = useRef(null)
 
   function handleGenerate() {
     if (text.trim() === "") {
@@ -19,6 +23,44 @@ export default function GeneratorScreen() {
   function handleClean() {
     setQrValue("")
     setText("")
+  }
+
+  async function handleSave() {
+    console.log("1");
+
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+
+    console.log("2", status);
+
+    qrRef.current.toDataURL(async (base64) => {
+      console.log("3");
+
+      const fileUri =
+        FileSystem.cacheDirectory + `qrcode-${Date.now()}.png`;
+
+      console.log("4", fileUri);
+
+      try {
+        await FileSystem.writeAsStringAsync(
+          fileUri,
+          base64,
+          {
+            encoding: FileSystem.EncodingType.Base64,
+          }
+        );
+
+        console.log("5");
+
+        const asset = await MediaLibrary.createAssetAsync(fileUri);
+
+        console.log("6", asset);
+
+        alert("Salvo!");
+      } catch (e) {
+        console.log(e);
+        alert(String(e));
+      }
+    });
   }
 
   return (
@@ -45,6 +87,7 @@ export default function GeneratorScreen() {
       <View style={styles.qrCodeContainer}>
         {qrValue ? (
           <QRCode
+            getRef={(c) => (qrRef.current = c)}
             value={qrValue}
             size={200}
             color="black"
@@ -58,7 +101,7 @@ export default function GeneratorScreen() {
       </View>
 
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={[globalStyles.button, { flex: 1 }]}>
+        <TouchableOpacity onPress={handleSave} style={[globalStyles.button, { flex: 1 }]}>
           <Text style={{ color: "#FFF" }}>Baixar</Text>
         </TouchableOpacity>
 
