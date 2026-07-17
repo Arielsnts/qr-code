@@ -7,17 +7,17 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
 
 export default function GeneratorScreen() {
-  const [text, setText] = useState("");
-  const [qrValue, setQrValue] = useState("");
+  const [text, setText] = useState("")
+  const [qrValue, setQrValue] = useState("")
 
   const qrRef = useRef(null)
 
   function handleGenerate() {
     if (text.trim() === "") {
-      alert("Digite um texto antes de gerar o QR Code!");
-      return;
+      alert("Digite um texto antes de gerar o QR Code!")
+      return
     }
-    setQrValue(text);
+    setQrValue(text)
   }
 
   function handleClean() {
@@ -26,19 +26,11 @@ export default function GeneratorScreen() {
   }
 
   async function handleSave() {
-    console.log("1");
-
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-
-    console.log("2", status);
+    const { status } = await MediaLibrary.requestPermissionsAsync()
 
     qrRef.current.toDataURL(async (base64) => {
-      console.log("3");
-
       const fileUri =
-        FileSystem.cacheDirectory + `qrcode-${Date.now()}.png`;
-
-      console.log("4", fileUri);
+        FileSystem.cacheDirectory + `qrcode-${Date.now()}.png`
 
       try {
         await FileSystem.writeAsStringAsync(
@@ -47,20 +39,16 @@ export default function GeneratorScreen() {
           {
             encoding: FileSystem.EncodingType.Base64,
           }
-        );
-
-        console.log("5");
+        )
 
         const asset = await MediaLibrary.createAssetAsync(fileUri);
 
-        console.log("6", asset);
-
-        alert("Salvo!");
+        alert("Salvo!")
       } catch (e) {
-        console.log(e);
-        alert(String(e));
+        console.log(e)
+        alert(String(e))
       }
-    });
+    })
   }
 
   return (
@@ -111,7 +99,7 @@ export default function GeneratorScreen() {
       </View>
 
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -147,4 +135,4 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%"
   }
-});
+})
