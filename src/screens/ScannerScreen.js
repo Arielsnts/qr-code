@@ -34,11 +34,13 @@ export default function ScannerScreen() {
 
   if (!permission.granted) {
     return (
-      <View style={globalStyles.containerPrincipal}>
-        <Text>É preciso de permissão para acessar a câmera</Text>
-        <Button style={globalStyles.button} onPress={requestPermission} title="Permitir" />
-      </View>
-    );
+      <View style={[globalStyles.containerPrincipal, { gap: 20 }]}>
+        <Text style={{ color: "#FFF" }} >É preciso de permissão para acessar a câmera</Text>
+        <TouchableOpacity onPress={requestPermission} style={globalStyles.button}>
+          <Text style={{ color: "#FFF" }}>Permitir</Text>
+        </TouchableOpacity>
+      </View >
+    )
   }
 
   return (
