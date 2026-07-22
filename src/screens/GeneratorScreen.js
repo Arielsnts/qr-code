@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { globalStyles } from "../styles/globalStyles";
 import { theme } from "../styles/theme";
 import QRCode from "react-native-qrcode-svg";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import * as MediaLibrary from "expo-media-library";
 
 export default function GeneratorScreen() {
@@ -27,6 +27,11 @@ export default function GeneratorScreen() {
 
   async function handleSave() {
     const { status } = await MediaLibrary.requestPermissionsAsync()
+
+    if (status !== "granted") {
+      alert("Permissão negada.");
+      return;
+    }
 
     qrRef.current.toDataURL(async (base64) => {
       const fileUri =
